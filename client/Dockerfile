@@ -15,17 +15,17 @@ COPY . .
 # Copy the .env file to the working directory
 COPY .env ./
 
+# Build
+RUN yarn build
+
+# Serve
+RUN yarn global add serve
+
 # Expose the port that your app runs on
-EXPOSE 3000
-
-# Generate Prisma Client
-RUN npx prisma generate
-
-# Apply Prisma migrations
-# RUN npx prisma migrate deploy
+EXPOSE 4200
 
 # Command to run your application
-CMD ["yarn", "start"]
+CMD ["serve", "-s", "build", "-p 4200"]
 
-# docker build -t rwallet-server .
-# docker run --env-file .env -p 3000:3000 -d rwallet-server
+# docker build -t rwallet-client .
+# docker run --env-file .env -p 4200:4200 -d rwallet-client

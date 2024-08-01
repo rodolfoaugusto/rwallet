@@ -8,7 +8,14 @@ services:
       POSTGRES_DB: rwalet
     ports:
       - 5432:5432
-  api:
+  frontend:
+    build:
+      context: client/.
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+  backend:
     build:
       context: server/.
     ports:

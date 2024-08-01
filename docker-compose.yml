@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: rwalet
+    ports:
+      - 5432:5432
+  api:
+    build:
+      context: server/.
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db

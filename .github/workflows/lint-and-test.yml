@@ -1,0 +1,30 @@
+name: Lint and tests
+
+on:
+  pull_request:
+    types: ["opened", "edited", "reopened", "synchronize"]
+
+jobs:
+  run-linters:
+    name: Run linters and tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "server"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20.9.0
+          cache: yarn
+          cache-dependency-path: server/yarn.lock
+      - name: Install dependencies
+        run: yarn --prefer-offline
+      - name: Run Server Tests
+        run: yarn test
+      - name: Run Server Lint
+        run: yarn lint:check

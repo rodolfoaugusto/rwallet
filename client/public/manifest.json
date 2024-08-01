@@ -1,0 +1,34 @@
+{
+    "name": "R Wallet",
+    "short_name": "R Wallet",
+    "theme_color": "#4c84ff",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "start_url": ".",
+    "icons": [
+        {
+            "src": "favicon.ico",
+            "sizes": "32x32"
+        },
+        {
+            "src": "icon-32x32.png",
+            "sizes": "32x32",
+            "type": "image/png"
+        },
+        {
+            "src": "icon-180x180.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        },
+        {
+            "src": "icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

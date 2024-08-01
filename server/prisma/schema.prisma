@@ -1,0 +1,160 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  SYSTEM
+
+  @@map("roles")
+}
+
+enum CryptoCurrency {
+  BTC
+  ETH
+  USDT
+
+  @@map("crypto_currencies")
+}
+
+model User {
+  id       String @id @default(cuid())
+  password String
+  email    String @unique
+  name     String
+  role     Role   @default(USER)
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz
+
+  balances     Balance[]
+  bankAccounts BankAccount[]
+  cryptoAssets CryptoAssets[]
+  passkeys     Passkey[]
+
+  @@map("users")
+}
+
+model Passkey {
+  credentialId        String  @id @map("credential_id")
+  credentialPublicKey Bytes   @map("credential_public_key") @db.ByteA
+  userId              String  @map("user_id")
+  webauthnId          String  @unique @map("webauthn_id")
+  counter             Int
+  backupEligible      Boolean @default(false) @map("backup_eligible")
+  transports          String
+  deviceType          String  @map("device_type")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  userPasskey User @relation(fields: [userId], references: [id])
+
+  @@map("passkeys")
+}
+
+model Balance {
+  id       String         @id @default(cuid())
+  userId   String         @map("user_id")
+  amount   Float
+  currency CryptoCurrency @default(BTC)
+  address  String?        @unique
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  userBalance User @relation(fields: [userId], references: [id])
+
+  toBalanceTransactions   Transaction[] @relation(name: "toBalanceTransactions")
+  fromBalanceTransactions Transaction[] @relation(name: "fromBalanceTransactions")
+
+  cryptoAssets CryptoAssets[]
+
+  @@unique([userId, currency], name: "balances_user_id_currency_unique")
+  @@index([userId], name: "balances_user_id_index")
+  @@index([userId, currency], name: "balances_currency_user_id_index")
+  @@map("balances")
+}
+
+model Transaction {
+  id            String         @id @default(cuid())
+  transactionId String         @unique @map("transaction_id")
+  fromId        String         @map("from_id")
+  toId          String         @map("to_id")
+  fee           Float
+  amount        Float
+  currency      CryptoCurrency
+  status        String
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  toBalance   Balance? @relation("toBalanceTransactions", fields: [fromId], references: [id])
+  fromBalance Balance? @relation("fromBalanceTransactions", fields: [toId], references: [id])
+
+  @@map("transactions")
+}
+
+model CurrencyList {
+  id       String  @id @default(cuid())
+  value    String  @unique
+  isCrypto Boolean @default(true) @map("is_crypto")
+  price    Float   @default(0)
+  active   Boolean @default(true)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("currencies_list")
+}
+
+model BankAccount {
+  id            String @id @default(cuid())
+  name          String
+  userId        String @map("user_id")
+  bankName      String @map("bank_name")
+  accessToken   String @map("access_token")
+  institutionId String @map("institution_id")
+  accountId     String @unique @map("account_id")
+  accountMask   String @map("account_mask")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  userBankAccount User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, id], name: "bank_accounts_user_id_id_unique")
+  @@unique([userId, bankName, name, accountMask], name: "bank_accounts_user_id_bank_name_name_account_mask_unique")
+  @@map("bank_accounts")
+}
+
+model CryptoAssets {
+  id        String @id @default(cuid())
+  userId    String @map("user_id")
+  balanceId String @map("balance_id")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  userCryptoAsset User    @relation(fields: [userId], references: [id])
+  systemBalance   Balance @relation(fields: [balanceId], references: [id])
+
+  @@unique([userId, balanceId], name: "crypto_assets_user_id_balance_id_unique")
+  @@map("crypto_assets")
+}
+
+model SessionFingerprint {
+  sessionId String @unique @map("session_id")
+  challenge String
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("session_fingerprints")
+}

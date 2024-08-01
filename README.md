@@ -6,9 +6,9 @@
 
 ## Notes
 
-> Plaid sandbox credentials: **username** `user_good` and **password** `pass_good`.
-> [Download the Bitcoin Core](https://bitcoin.org/bin/bitcoin-core-27.0/bitcoin-27.0-x86_64-linux-gnu.tar.gz) and use the follow configuration file.
+> [Download the Bitcoin Core](https://bitcoin.org/bin/bitcoin-core-27.0/bitcoin-27.0-x86_64-linux-gnu.tar.gz) and use the following configuration file.
 > [Regtest config asset](server/assets) for the Bitcoin Core in `regtest` mode.
+> Plaid sandbox credentials: **username** `user_good` and **password** `pass_good`.
 
 ## Structure
 

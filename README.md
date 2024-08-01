@@ -4,11 +4,15 @@
   <img src=".assets/rwallet-logo.png" alt="R Wallet logo" height="140">
 </p>
 
+# Introduction
+
+Client and Server demonstration offer for Bitcoin test wallet with purchase flow, side-to-side encryption and passkey authentication. Developed in Node.js and React.
+
 ## Notes
 
-> [Download the Bitcoin Core](https://bitcoin.org/bin/bitcoin-core-27.0/bitcoin-27.0-x86_64-linux-gnu.tar.gz) and use the following configuration file.
-> [Regtest config asset](server/assets) for the Bitcoin Core in `regtest` mode.
-> Plaid sandbox credentials: **username** `user_good` and **password** `pass_good`.
+> - [Download the Bitcoin Core](https://bitcoin.org/bin/bitcoin-core-27.0/bitcoin-27.0-x86_64-linux-gnu.tar.gz) and use the following configuration file.
+> - [Regtest config asset](server/assets) for the Bitcoin Core in `regtest` mode.
+> - Plaid sandbox credentials: **username** `user_good` and **password** `pass_good`.
 
 ## Structure
 

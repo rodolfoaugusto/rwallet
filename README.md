@@ -44,6 +44,15 @@ root
 │ ├── tests/         # unit tests coverage.
 │ └── app.js         # main entry point of the server application.
 ```
+## Screenshots
+**Login**
+![image](https://github.com/user-attachments/assets/ae34b857-03c8-483e-a747-4fcd1c80f3bb)
+
+**Connect bank account**
+![image](https://github.com/user-attachments/assets/8c318a6d-91c2-420b-bbd8-4a72b7279f46)
+
+**Crypto Offer**
+![image](https://github.com/user-attachments/assets/45b9e018-acbe-4086-8acb-abb08749c0a3)
 
 ## Entity Relationship Diagram
 
